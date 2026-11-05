@@ -7448,6 +7448,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7639816233832474929, guid: 6ed1a1176234bbe4abb359738d233e98, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: aadc7e9c095ed4262967c39282ace842, type: 2}
     - target: {fileID: 7756331883784670143, guid: 6ed1a1176234bbe4abb359738d233e98, type: 3}
       propertyPath: m_Name
       value: Mur_Ouest (26)
