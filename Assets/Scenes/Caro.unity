@@ -3838,8 +3838,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355471071}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.41, y: 1.3, z: -41.33}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11.41, y: 1.1999999, z: -33.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3847,7 +3847,7 @@ Transform:
   - {fileID: 1841997499}
   - {fileID: 1767915888}
   - {fileID: 98772496}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 904013676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &357429730
 PrefabInstance:
@@ -10319,7 +10319,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &904013676
 Transform:
   m_ObjectHideFlags: 0
@@ -10336,6 +10336,7 @@ Transform:
   - {fileID: 827174627}
   - {fileID: 989664312}
   - {fileID: 971995102}
+  - {fileID: 355471072}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &912095008
@@ -15321,6 +15322,64 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.5, y: 7, z: 3.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1421500865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1421500867}
+  - component: {fileID: 1421500866}
+  m_Layer: 0
+  m_Name: MBIANCE_BROUILLARD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1421500866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421500865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de1b90012b7c45c79ffd66d45c079505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BrouillardHorreur
+  cameraJoueur: {fileID: 1434136399}
+  joueur: {fileID: 1767915888}
+  lumiereDirectionnelle: {fileID: 1351317021}
+  couleurBrouillard: {r: 0.2, g: 0.20784314, b: 0.16470589, a: 1}
+  distanceNette: 2
+  epaisseurBrume: 8
+  lumiereAmbiante: {r: 0.05, g: 0.05, b: 0.06, a: 1}
+  intensiteLumiereDirectionnelle: 0.15
+  couleurLumiereDirectionnelle: {r: 0.6, g: 0.7, b: 1, a: 1}
+  creerLampeJoueur: 1
+  couleurLampe: {r: 1, g: 0.82, b: 0.55, a: 1}
+  porteeLampe: 9
+  intensiteLampe: 2.5
+  positionLampe: {x: 0, y: 2, z: 0}
+--- !u!4 &1421500867
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421500865}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1421842207
 GameObject:
   m_ObjectHideFlags: 0
@@ -19009,7 +19068,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ControleurPremierePersonne3D
   vitesse: 4
   vitesseCourse: 8
-  cameraJoueur: {fileID: 0}
+  cameraJoueur: {fileID: 1434136399}
   hauteurYeux: 0.7
   sensibiliteSouris: 2
   inverserAxeVertical: 0
@@ -23501,7 +23560,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2108448941}
-  - {fileID: 355471072}
   - {fileID: 904013676}
   - {fileID: 1351317022}
   - {fileID: 1690105268}
@@ -23523,3 +23581,4 @@ SceneRoots:
   - {fileID: 869874244}
   - {fileID: 1549236339}
   - {fileID: 697007046}
+  - {fileID: 1421500867}
