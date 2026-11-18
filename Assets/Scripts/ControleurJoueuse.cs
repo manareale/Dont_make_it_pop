@@ -28,6 +28,12 @@ public class ControleurJoueuse : MonoBehaviour
     [Header("Première personne")]
     [SerializeField] private float hauteurYeux = 1.6f;
 
+    [Header("Collisions (murs de maïs)")]
+    [Tooltip("Rayon de la capsule de collision du personnage.")]
+    [SerializeField] private float rayonCorps = 0.3f;
+    [Tooltip("Hauteur de la capsule. 0 = calculée à partir du modèle.")]
+    [SerializeField] private float hauteurCorps = 0f;
+
     private Animator animateur;
     private Rigidbody corps;
     private Renderer[] rendus;
@@ -50,6 +56,7 @@ public class ControleurJoueuse : MonoBehaviour
         corps.constraints |= RigidbodyConstraints.FreezeRotationX
                            | RigidbodyConstraints.FreezeRotationZ;
         corps.interpolation = RigidbodyInterpolation.Interpolate;
+        ConfigurerCollisions();
 
         if (animateur == null)
             Debug.LogError("Aucun Animator trouvé !");
@@ -179,6 +186,72 @@ public class ControleurJoueuse : MonoBehaviour
     private void AppliquerVue()
     {
         MasquerCorps(premierePersonne);
+    }
+
+    // Pour que la joueuse soit bloquée par les murs :
+    // 1. Le Rigidbody ne doit PAS être kinematic. Un Rigidbody kinematic déplacé
+    //    avec MovePosition traverse tout : la physique ne le repousse jamais.
+    // 2. Il faut un vrai collider. Le MeshCollider ajouté sur le modèle Mixamo
+    //    n'a aucun maillage (le maillage est sur un enfant) : il ne touche rien.
+    //    On le remplace par une capsule à la taille du personnage.
+    // 3. Friction nulle : la joueuse glisse le long des murs au lieu d'y coller.
+    private void ConfigurerCollisions()
+    {
+        if (corps.isKinematic)
+        {
+            Debug.LogWarning("[Joueuse] Le Rigidbody était 'Is Kinematic' : elle traversait les murs. " +
+                             "Désactivé automatiquement (décochez-le aussi dans l'Inspector).", this);
+            corps.isKinematic = false;
+        }
+        corps.useGravity = true;
+        corps.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+        // Désactiver les MeshCollider vides ou non convexes (inutilisables sur un corps qui bouge).
+        foreach (MeshCollider mc in GetComponents<MeshCollider>())
+        {
+            if (mc.sharedMesh == null || !mc.convex)
+            {
+                mc.enabled = false;
+                Debug.LogWarning("[Joueuse] MeshCollider sans maillage désactivé, remplacé par une capsule. " +
+                                 "Vous pouvez le supprimer de l'Inspector.", this);
+            }
+        }
+
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+        if (capsule == null)
+        {
+            capsule = gameObject.AddComponent<CapsuleCollider>();
+            float h = hauteurCorps > 0f ? hauteurCorps : HauteurDuModele();
+            capsule.direction = 1; // axe Y
+            capsule.height = h;
+            capsule.radius = Mathf.Min(rayonCorps, h * 0.5f);
+            capsule.center = new Vector3(0f, h * 0.5f, 0f); // pivot Mixamo = aux pieds
+        }
+        capsule.isTrigger = false;
+
+        var glisse = new PhysicsMaterial("Joueuse_SansFriction")
+        {
+            dynamicFriction = 0f,
+            staticFriction = 0f,
+            frictionCombine = PhysicsMaterialCombine.Minimum,
+            bounciness = 0f,
+            bounceCombine = PhysicsMaterialCombine.Minimum
+        };
+        capsule.sharedMaterial = glisse;
+    }
+
+    // Hauteur du personnage d'après ses maillages (environ 1,7 m pour un modèle Mixamo).
+    private float HauteurDuModele()
+    {
+        Bounds b = default;
+        bool trouve = false;
+        foreach (Renderer r in GetComponentsInChildren<Renderer>(true))
+        {
+            if (!trouve) { b = r.bounds; trouve = true; } else b.Encapsulate(r.bounds);
+        }
+        float echelle = Mathf.Max(0.0001f, transform.lossyScale.y);
+        float h = trouve ? (b.max.y - transform.position.y) / echelle : 1.7f;
+        return Mathf.Clamp(h, 1f, 2.5f);
     }
 
     private static void VerrouillerSouris(bool verrouiller)
