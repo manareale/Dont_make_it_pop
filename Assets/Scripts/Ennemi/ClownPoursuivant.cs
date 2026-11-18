@@ -23,7 +23,6 @@ public class ClownPoursuivant : MonoBehaviour
     [Tooltip("Le joueur. Vide = l'objet avec le tag Player.")]
     [SerializeField] private Transform cible;
     [Tooltip("Ou renvoyer le joueur quand il est attrape. Vide = l'objet Point_Reapparition.")]
-    [SerializeField] private Transform pointReapparition;
 
     [Header("Vitesses (m/s)")]
     [SerializeField] private float vitesseMarche = 1.6f;
@@ -48,6 +47,8 @@ public class ClownPoursuivant : MonoBehaviour
     [SerializeField] private float pauseApresAttrape = 2f;
     [Tooltip("Le clown retourne a sa position de depart apres avoir attrape le joueur.")]
     [SerializeField] private bool retourAuDepart = true;
+    [Tooltip("Flash rouge + fleche de direction a l'ecran quand le joueur est attrape.")]
+    [SerializeField] private bool afficherIndicateurDegats = true;
     [Tooltip("Appele quand le joueur est attrape (son, ecran de defaite...).")]
     public UnityEvent quandAttrape;
 
@@ -109,11 +110,6 @@ public class ClownPoursuivant : MonoBehaviour
         {
             GameObject joueur = GameObject.FindGameObjectWithTag("Player");
             if (joueur) cible = joueur.transform;
-        }
-        if (!pointReapparition)
-        {
-            GameObject point = GameObject.Find("Point_Reapparition");
-            if (point) pointReapparition = point.transform;
         }
         if (cible)
         {
@@ -236,21 +232,9 @@ public class ClownPoursuivant : MonoBehaviour
 
     private void Attraper()
     {
+        // Avant la teleportation : la fleche doit montrer ou etait le clown.
+        if (afficherIndicateurDegats) IndicateurDegats.Signaler(Position);
         quandAttrape?.Invoke();
-
-        if (pointReapparition)
-        {
-            if (corpsCible)
-            {
-                corpsCible.position = pointReapparition.position;
-                if (!corpsCible.isKinematic)
-                {
-                    corpsCible.linearVelocity = Vector3.zero;
-                    corpsCible.angularVelocity = Vector3.zero;
-                }
-            }
-            cible.position = pointReapparition.position;
-        }
 
         if (retourAuDepart) Teleporter(positionDepart, rotationDepart);
         chemin.Clear();

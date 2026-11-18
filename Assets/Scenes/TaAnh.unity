@@ -3157,7 +3157,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClownPoursuivant
   cible: {fileID: 1767915888}
-  pointReapparition: {fileID: 0}
   vitesseMarche: 2
   vitesseCourse: 5
   acceleration: 6
@@ -3171,7 +3170,8 @@ MonoBehaviour:
     m_Bits: 4294967295
   distanceAttrape: 1.1
   pauseApresAttrape: 2
-  retourAuDepart: 1
+  retourAuDepart: 0
+  afficherIndicateurDegats: 1
   quandAttrape:
     m_PersistentCalls:
       m_Calls: []
