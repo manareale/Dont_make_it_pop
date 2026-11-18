@@ -23,6 +23,7 @@ public class ClownPoursuivant : MonoBehaviour
     [Tooltip("Le joueur. Vide = l'objet avec le tag Player.")]
     [SerializeField] private Transform cible;
     [Tooltip("Ou renvoyer le joueur quand il est attrape. Vide = l'objet Point_Reapparition.")]
+    [SerializeField] private Transform pointReapparition;
 
     [Header("Vitesses (m/s)")]
     [SerializeField] private float vitesseMarche = 1.6f;
@@ -110,6 +111,11 @@ public class ClownPoursuivant : MonoBehaviour
         {
             GameObject joueur = GameObject.FindGameObjectWithTag("Player");
             if (joueur) cible = joueur.transform;
+        }
+        if (!pointReapparition)
+        {
+            GameObject point = GameObject.Find("Point_Reapparition");
+            if (point) pointReapparition = point.transform;
         }
         if (cible)
         {
@@ -235,6 +241,20 @@ public class ClownPoursuivant : MonoBehaviour
         // Avant la teleportation : la fleche doit montrer ou etait le clown.
         if (afficherIndicateurDegats) IndicateurDegats.Signaler(Position);
         quandAttrape?.Invoke();
+
+        if (pointReapparition)
+        {
+            if (corpsCible)
+            {
+                corpsCible.position = pointReapparition.position;
+                if (!corpsCible.isKinematic)
+                {
+                    corpsCible.linearVelocity = Vector3.zero;
+                    corpsCible.angularVelocity = Vector3.zero;
+                }
+            }
+            cible.position = pointReapparition.position;
+        }
 
         if (retourAuDepart) Teleporter(positionDepart, rotationDepart);
         chemin.Clear();
