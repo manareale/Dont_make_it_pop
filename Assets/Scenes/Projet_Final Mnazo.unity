@@ -3890,7 +3890,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!4 &378938010 stripped
 Transform:
@@ -3937,8 +3937,8 @@ MonoBehaviour:
   valeurIdle: 0
   valeurMarche: 0.5
   valeurCourse: 1
-  cameraJoueur: {fileID: 0}
-  premierePersonne: 0
+  cameraJoueur: {fileID: 1434136399}
+  premierePersonne: 1
   sensibiliteSouris: 2
   angleVerticalMax: 70
   distanceCamera: 4
