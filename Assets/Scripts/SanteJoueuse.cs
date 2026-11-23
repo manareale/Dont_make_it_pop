@@ -24,7 +24,7 @@ public class SanteJoueuse : MonoBehaviour
     [Header("Mort")]
     [Tooltip("Ou reapparaitre. Vide = la position de depart de la joueuse.")]
     [SerializeField] private Transform pointReapparition;
-    [SerializeField] private string messageMort = "VOUS ÊTES MORTE";
+    [SerializeField] private string messageMort = "VOUS ÊTES MORT :(";
     [SerializeField, Min(0f)] private float dureeEcranMort = 2f;
 
     [Header("Interface")]

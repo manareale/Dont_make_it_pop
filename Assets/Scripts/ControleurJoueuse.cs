@@ -24,6 +24,14 @@ public class ControleurJoueuse : MonoBehaviour
     [Header("Troisième personne")]
     [SerializeField] private float distanceCamera = 4f;
     [SerializeField] private float hauteurCible = 1.5f;
+    [Tooltip("La caméra s'arrête devant les murs au lieu de passer à travers.")]
+    [SerializeField] private bool cameraEviteMurs = true;
+    [SerializeField] private float rayonCamera = 0.25f;
+
+    [Header("Bouton de vue")]
+    [Tooltip("Affiche un bouton à l'écran pour passer de la 1re à la 3e personne (la touche V marche aussi).")]
+    [SerializeField] private bool afficherBoutonVue = true;
+    [SerializeField] private KeyCode toucheVue = KeyCode.V;
 
     [Header("Première personne")]
     [SerializeField] private float hauteurYeux = 1.6f;
@@ -85,20 +93,30 @@ public class ControleurJoueuse : MonoBehaviour
         MasquerCorps(false);
     }
 
+    // Quand c'est vrai (ex. pendant un jumpscare) : la joueuse ne bouge plus
+    // et la caméra n'est plus contrôlée par ce script.
+    public bool Bloquee { get; set; }
+
     private void Update()
     {
-        // Souris
+        if (Bloquee)
+        {
+            direction = Vector3.zero;
+            vitesseDeplacement = 0f;
+            if (animateur) animateur.SetFloat(ParametreVitesse, valeurIdle, 0.1f, Time.deltaTime);
+            return;
+        }
+
+        // Souris (un clic sur un bouton de l'interface ne reprend pas la souris :
+        // sinon le curseur saute au centre et le bouton ne recevrait jamais le clic).
         if (Input.GetKeyDown(KeyCode.Escape))
             VerrouillerSouris(false);
-        else if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
+        else if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && !SourisSurInterface())
             VerrouillerSouris(true);
 
         // Changer de vue
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            premierePersonne = !premierePersonne;
-            AppliquerVue();
-        }
+        if (Input.GetKeyDown(toucheVue))
+            ChangerVue();
 
         if (Cursor.lockState == CursorLockMode.Locked)
         {
@@ -176,7 +194,7 @@ public class ControleurJoueuse : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!cameraJoueur) return;
+        if (!cameraJoueur || Bloquee) return;
 
         Quaternion rot = Quaternion.Euler(tangage, lacet, 0f);
 
@@ -188,9 +206,66 @@ public class ControleurJoueuse : MonoBehaviour
         else
         {
             Vector3 pivot = transform.position + Vector3.up * hauteurCible;
-            cameraJoueur.transform.position = pivot - rot * Vector3.forward * distanceCamera;
+            Vector3 arriere = rot * Vector3.back;
+            float voulue = cameraEviteMurs ? DistanceLibre(pivot, arriere, distanceCamera) : distanceCamera;
+            // Se rapproche tout de suite d'un mur, s'en eloigne en douceur.
+            distanceActuelle = voulue < distanceActuelle
+                ? voulue
+                : Mathf.MoveTowards(distanceActuelle, voulue, 6f * Time.deltaTime);
+            cameraJoueur.transform.position = pivot + arriere * distanceActuelle;
             cameraJoueur.transform.rotation = rot;
         }
+    }
+
+    // ------------------------------------------------------------------
+    // Changement de vue (touche V ou bouton à l'écran)
+
+    public bool PremierePersonne => premierePersonne;
+    public event System.Action<bool> VueChangee;   // true = première personne
+
+    public void ChangerVue() => DefinirVue(!premierePersonne);
+
+    public void DefinirVue(bool enPremierePersonne)
+    {
+        premierePersonne = enPremierePersonne;
+        distanceActuelle = 0.5f; // en 3e personne, la caméra recule depuis la tête
+        AppliquerVue();
+        VueChangee?.Invoke(premierePersonne);
+    }
+
+    // Reprend le contrôle de la souris (après un clic sur le bouton).
+    public void ReprendreSouris() => VerrouillerSouris(true);
+
+    private float distanceActuelle;
+    private readonly RaycastHit[] touchesCamera = new RaycastHit[16];
+
+    // Distance jusqu'au premier obstacle derrière la joueuse (en ignorant son propre corps et les triggers).
+    private float DistanceLibre(Vector3 pivot, Vector3 direction, float max)
+    {
+        int n = Physics.SphereCastNonAlloc(pivot, rayonCamera, direction, touchesCamera, max, ~0, QueryTriggerInteraction.Ignore);
+        float libre = max;
+        for (int i = 0; i < n; i++)
+        {
+            RaycastHit t = touchesCamera[i];
+            if (t.collider.transform.IsChildOf(transform)) continue;   // la joueuse elle-même
+            if (t.collider.attachedRigidbody && !t.collider.attachedRigidbody.isKinematic) continue; // objets qui bougent
+            if (t.distance <= 0f) continue;                             // déjà dedans au départ
+            libre = Mathf.Min(libre, t.distance);
+        }
+        return Mathf.Max(0.3f, libre - 0.1f);
+    }
+
+    private static bool SourisSurInterface()
+    {
+        var es = UnityEngine.EventSystems.EventSystem.current;
+        return es != null && es.IsPointerOverGameObject();
+    }
+
+    private void Start()
+    {
+        distanceActuelle = distanceCamera;
+        if (afficherBoutonVue && FindFirstObjectByType<BoutonChangerVue>() == null)
+            gameObject.AddComponent<BoutonChangerVue>();
     }
 
     private void AppliquerVue()
