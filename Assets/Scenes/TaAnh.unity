@@ -2320,6 +2320,9 @@ MonoBehaviour:
   pauseApresAttrape: 2
   retourAuDepart: 0
   afficherIndicateurDegats: 1
+  viesParCoup: 1
+  forceRepousse: 7
+  retourAuDepartSiMort: 1
   quandAttrape:
     m_PersistentCalls:
       m_Calls: []
@@ -3094,6 +3097,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 380382543}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &395256794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 395256796}
+  - component: {fileID: 395256795}
+  m_Layer: 0
+  m_Name: CHAMP_DE_FORCE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &395256795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395256794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a5851777cd184a4381fddedd744d819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChampDeForce
+  sol: {fileID: 2009524469}
+  marge: 0.75
+  hauteur: 8
+  epaisseur: 2
+  visible: 1
+  couleur: {r: 0.25, g: 0.75, b: 1, a: 1}
+  hauteurVisuelle: 3.5
+  distanceApparition: 5
+  opaciteMax: 0.55
+  tailleMotif: 1.2
+  profondeurChute: 4
+  viesPerduesChute: 1
+  joueuse: {fileID: 0}
+--- !u!4 &395256796
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395256794}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &401672736
 GameObject:
   m_ObjectHideFlags: 0
@@ -10988,6 +11048,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 657ac5779deadcd42b6ec4131ed276ff, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1390218947}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 657ac5779deadcd42b6ec4131ed276ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1390218948}
   m_SourcePrefab: {fileID: 100100000, guid: 657ac5779deadcd42b6ec4131ed276ff, type: 3}
 --- !u!1 &1390218940 stripped
 GameObject:
@@ -11076,6 +11139,35 @@ CapsuleCollider:
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
+--- !u!114 &1390218948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390218940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a39ad243e3701419d99c4ae5741ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SanteJoueuse
+  viesMax: 3
+  invincibiliteApresCoup: 1.5
+  pointReapparition: {fileID: 0}
+  messageMort: "VOUS \xCATES MORTE"
+  dureeEcranMort: 2
+  afficherCoeurs: 1
+  afficherIndicateurDegats: 1
+  couleurCoeur: {r: 0.85, g: 0.08, b: 0.12, a: 1}
+  quandDegats:
+    m_PersistentCalls:
+      m_Calls: []
+  quandMort:
+    m_PersistentCalls:
+      m_Calls: []
+  quandReapparition:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1390664046
 GameObject:
   m_ObjectHideFlags: 0
@@ -16985,3 +17077,4 @@ SceneRoots:
   - {fileID: 1778499394}
   - {fileID: 1390218939}
   - {fileID: 1029080692}
+  - {fileID: 395256796}
