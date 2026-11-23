@@ -148,8 +148,11 @@ public class ControleurJoueuse : MonoBehaviour
         {
             Vector3 v = corps.linearVelocity;
             corps.linearVelocity = new Vector3(
-                direction.x * vitesseDeplacement, v.y, direction.z * vitesseDeplacement);
+                direction.x * vitesseDeplacement + repousse.x, v.y, direction.z * vitesseDeplacement + repousse.z);
         }
+
+        // La poussee (coup du clown) s'arrete progressivement.
+        repousse = Vector3.MoveTowards(repousse, Vector3.zero, 20f * Time.fixedDeltaTime);
 
         // Rotation
         if (premierePersonne)
@@ -162,6 +165,13 @@ public class ControleurJoueuse : MonoBehaviour
             corps.MoveRotation(Quaternion.Slerp(
                 corps.rotation, cible, vitesseRotation * Time.fixedDeltaTime));
         }
+    }
+
+    // Pousse la joueuse (ex. coup d'un ennemi). 'vitesse' en m/s, horizontale.
+    private Vector3 repousse;
+    public void Repousser(Vector3 vitesse)
+    {
+        repousse = new Vector3(vitesse.x, 0f, vitesse.z);
     }
 
     private void LateUpdate()

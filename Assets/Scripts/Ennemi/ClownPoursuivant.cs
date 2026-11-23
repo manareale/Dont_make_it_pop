@@ -50,6 +50,14 @@ public class ClownPoursuivant : MonoBehaviour
     [SerializeField] private bool retourAuDepart = true;
     [Tooltip("Flash rouge + fleche de direction a l'ecran quand le joueur est attrape.")]
     [SerializeField] private bool afficherIndicateurDegats = true;
+
+    [Header("Degats (si la joueuse a SanteJoueuse)")]
+    [Tooltip("Vies retirees a chaque fois que le clown touche la joueuse.")]
+    [SerializeField, Min(0)] private int viesParCoup = 1;
+    [Tooltip("Force avec laquelle la joueuse est repoussee apres un coup.")]
+    [SerializeField, Min(0f)] private float forceRepousse = 7f;
+    [Tooltip("Le clown retourne a sa position de depart quand il tue la joueuse.")]
+    [SerializeField] private bool retourAuDepartSiMort = true;
     [Tooltip("Appele quand le joueur est attrape (son, ecran de defaite...).")]
     public UnityEvent quandAttrape;
 
@@ -74,6 +82,7 @@ public class ClownPoursuivant : MonoBehaviour
     private Animator animateur;
     private Rigidbody corps;
     private Rigidbody corpsCible;
+    private SanteJoueuse santeCible;
     private Collider colliderCible;
     private GrilleNavigation grille;
 
@@ -120,6 +129,7 @@ public class ClownPoursuivant : MonoBehaviour
         if (cible)
         {
             corpsCible = cible.GetComponentInParent<Rigidbody>();
+            santeCible = cible.GetComponentInParent<SanteJoueuse>();
             colliderCible = cible.GetComponentInChildren<Collider>();
         }
         else Debug.LogWarning("[Clown] Aucun joueur trouve (tag Player).", this);
@@ -150,6 +160,17 @@ public class ClownPoursuivant : MonoBehaviour
     private void Update()
     {
         if (grille == null || !cible) { ChangerVitesseAnimation(); return; }
+
+        // La joueuse est morte : attendre qu'elle reapparaisse.
+        if (santeCible && santeCible.EstMorte)
+        {
+            chemin.Clear();
+            aUneDestination = false;
+            EtatActuel = Etat.Repos;
+            vitesseVoulue = 0f;
+            ChangerVitesseAnimation();
+            return;
+        }
 
         if (Time.time < pauseJusqua)
         {
@@ -238,6 +259,35 @@ public class ClownPoursuivant : MonoBehaviour
 
     private void Attraper()
     {
+        // Avec un systeme de sante : le clown frappe au lieu de teleporter la joueuse.
+        if (santeCible)
+        {
+            if (!santeCible.RecevoirDegats(viesParCoup, Position)) return; // invincible : rien
+            quandAttrape?.Invoke();
+
+            if (santeCible.EstMorte)
+            {
+                if (retourAuDepartSiMort || retourAuDepart) Teleporter(positionDepart, rotationDepart);
+            }
+            else
+            {
+                Vector3 pousse = cible.position - Position; pousse.y = 0f;
+                if (pousse.sqrMagnitude < 0.0001f) pousse = transform.forward;
+                var controleur = cible.GetComponentInParent<ControleurJoueuse>();
+                if (controleur) controleur.Repousser(pousse.normalized * forceRepousse);
+                if (retourAuDepart) Teleporter(positionDepart, rotationDepart);
+            }
+
+            chemin.Clear();
+            aUneDestination = false;
+            EtatActuel = Etat.Repos;
+            vitesseVoulue = 0f;
+            vitesseActuelle = 0f;
+            pauseJusqua = Time.time + pauseApresAttrape;
+            return;
+        }
+
+        // Sans systeme de sante : ancien comportement (renvoi au point de reapparition).
         // Avant la teleportation : la fleche doit montrer ou etait le clown.
         if (afficherIndicateurDegats) IndicateurDegats.Signaler(Position);
         quandAttrape?.Invoke();
