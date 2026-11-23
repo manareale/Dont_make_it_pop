@@ -3718,7 +3718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1510fd4f77ff1ac4d8f40c98f2fa3074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpscarePoupee
-  distanceDeclenchement: 2.5
+  distanceDeclenchement: 7
   disparaitApres: 1
   delaiAvantNouvelleAttaque: 20
   cacheeDeLoin: 1
@@ -3730,7 +3730,7 @@ MonoBehaviour:
   forceTremblement: 0.6
   couleurLumiere: {r: 1, g: 0.15, b: 0.1, a: 1}
   flashsRouges: 1
-  cri: {fileID: 0}
+  cri: {fileID: 8300000, guid: daad28d2a9f8e0f4890b951eef2eb026, type: 3}
   volume: 1
   viesPerdues: 0
   joueuse: {fileID: 1390218945}
@@ -6164,7 +6164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1510fd4f77ff1ac4d8f40c98f2fa3074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpscarePoupee
-  distanceDeclenchement: 2.5
+  distanceDeclenchement: 7
   disparaitApres: 1
   delaiAvantNouvelleAttaque: 20
   cacheeDeLoin: 1
@@ -6176,7 +6176,7 @@ MonoBehaviour:
   forceTremblement: 0.6
   couleurLumiere: {r: 1, g: 0.15, b: 0.1, a: 1}
   flashsRouges: 1
-  cri: {fileID: 0}
+  cri: {fileID: 8300000, guid: daad28d2a9f8e0f4890b951eef2eb026, type: 3}
   volume: 1
   viesPerdues: 0
   joueuse: {fileID: 1390218945}
@@ -7969,7 +7969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1510fd4f77ff1ac4d8f40c98f2fa3074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpscarePoupee
-  distanceDeclenchement: 2.5
+  distanceDeclenchement: 7
   disparaitApres: 1
   delaiAvantNouvelleAttaque: 20
   cacheeDeLoin: 1
@@ -7981,7 +7981,7 @@ MonoBehaviour:
   forceTremblement: 0.6
   couleurLumiere: {r: 1, g: 0.15, b: 0.1, a: 1}
   flashsRouges: 1
-  cri: {fileID: 0}
+  cri: {fileID: 8300000, guid: daad28d2a9f8e0f4890b951eef2eb026, type: 3}
   volume: 1
   viesPerdues: 0
   joueuse: {fileID: 1390218945}
@@ -11507,7 +11507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1510fd4f77ff1ac4d8f40c98f2fa3074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpscarePoupee
-  distanceDeclenchement: 2.5
+  distanceDeclenchement: 7
   disparaitApres: 1
   delaiAvantNouvelleAttaque: 20
   cacheeDeLoin: 1
@@ -11519,7 +11519,7 @@ MonoBehaviour:
   forceTremblement: 0.6
   couleurLumiere: {r: 1, g: 0.15, b: 0.1, a: 1}
   flashsRouges: 1
-  cri: {fileID: 0}
+  cri: {fileID: 8300000, guid: daad28d2a9f8e0f4890b951eef2eb026, type: 3}
   volume: 1
   viesPerdues: 0
   joueuse: {fileID: 1390218945}
@@ -14632,7 +14632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1510fd4f77ff1ac4d8f40c98f2fa3074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpscarePoupee
-  distanceDeclenchement: 2.5
+  distanceDeclenchement: 7
   disparaitApres: 1
   delaiAvantNouvelleAttaque: 20
   cacheeDeLoin: 1
@@ -14644,7 +14644,7 @@ MonoBehaviour:
   forceTremblement: 0.6
   couleurLumiere: {r: 1, g: 0.15, b: 0.1, a: 1}
   flashsRouges: 1
-  cri: {fileID: 0}
+  cri: {fileID: 8300000, guid: daad28d2a9f8e0f4890b951eef2eb026, type: 3}
   volume: 1
   viesPerdues: 0
   joueuse: {fileID: 1390218945}
